@@ -23,6 +23,7 @@ package com.owncloud.android.files;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.os.Build;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -185,6 +186,7 @@ public class FileMenuFilter {
         filterUnsetEncrypted(toShow, toHide, endToEndEncryptionEnabled);
         filterSetPictureAs(toShow, toHide);
         filterStream(toShow, toHide);
+        filterOpenAsRichDocument(toShow, toHide, capability);
     }
 
     private void filterShareFile(List<Integer> toShow, List<Integer> toHide, OCCapability capability) {
@@ -260,6 +262,15 @@ public class FileMenuFilter {
             toShow.add(R.id.action_set_as_wallpaper);
         } else {
             toHide.add(R.id.action_set_as_wallpaper);
+        }
+    }
+
+    private void filterOpenAsRichDocument(List<Integer> toShow, List<Integer> toHide, OCCapability capability) {
+        if (isSingleFile() && android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
+                capability.getRichDocumentsMimeTypeList().contains(mFiles.iterator().next().getMimeType())) {
+            toShow.add(R.id.action_open_file_as_richdocument);
+        } else {
+            toHide.add(R.id.action_open_file_as_richdocument);
         }
     }
 
