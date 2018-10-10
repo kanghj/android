@@ -129,7 +129,6 @@ public class ExternalSiteWebView extends FileActivity {
 
         // disable local file access
         webSettings.setAllowFileAccess(false);
-        webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
         // enable javascript
         webSettings.setJavaScriptEnabled(true);

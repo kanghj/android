@@ -83,6 +83,7 @@ import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FolderPickerActivity;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
+import com.owncloud.android.ui.activity.RichDocumentsWebView;
 import com.owncloud.android.ui.activity.ToolbarActivity;
 import com.owncloud.android.ui.activity.UploadFilesActivity;
 import com.owncloud.android.ui.adapter.OCFileListAdapter;
@@ -907,7 +908,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                         }
 
                         if (capability.getRichDocumentsMimeTypeList().contains(file.getMimeType()) &&
-                                android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            android.os.Build.VERSION.SDK_INT >= RichDocumentsWebView.MINIMUM_API) {
                             mContainerActivity.getFileOperationsHelper().openFileAsRichDocument(file, getContext());
                         } else {
                             // automatic download, preview on finish

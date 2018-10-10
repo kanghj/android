@@ -27,7 +27,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -56,17 +58,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-// TODO check minimum android version
-
 /**
  * Opens document for editing via Richdocuments app in a web view
  */
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class RichDocumentsWebView extends ExternalSiteWebView {
 
     private static final String TAG = RichDocumentsWebView.class.getSimpleName();
-
     private static final int REQUEST_REMOTE_FILE = 100;
+
     public static final int REQUEST_LOCAL_FILE = 101;
+
+    public static final int MINIMUM_API = Build.VERSION_CODES.LOLLIPOP;
 
     private Unbinder unbinder;
     private OCFile file;
