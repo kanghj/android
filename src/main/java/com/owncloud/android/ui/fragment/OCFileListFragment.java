@@ -333,7 +333,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
         Bundle args = getArguments();
         mOnlyFoldersClickable = args != null && args.getBoolean(ARG_ONLY_FOLDERS_CLICKABLE, false);
-        mFileSelectable = (args != null) && args.getBoolean(ARG_FILE_SELECTABLE, false);
+        mFileSelectable = args != null && args.getBoolean(ARG_FILE_SELECTABLE, false);
         mLimitToMimeType = args != null ? args.getString(ARG_MIMETYPE, "") : "";
         boolean hideItemOptions = args != null && args.getBoolean(ARG_HIDE_ITEM_OPTIONS, false);
 

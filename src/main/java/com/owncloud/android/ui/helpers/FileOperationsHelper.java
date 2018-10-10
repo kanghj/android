@@ -262,8 +262,7 @@ public class FileOperationsHelper {
                     return;
                 }
             }
-            ; 
-            
+
             mFileActivity.showLoadingDialog(mFileActivity.getResources().getString(R.string.sync_in_progress));
             new Thread(new Runnable() {
                 @Override

@@ -33,6 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class FetchTemplateOperation extends RemoteOperation {
     private static final String TAG = FetchTemplateOperation.class.getSimpleName();
@@ -57,7 +58,7 @@ public class FetchTemplateOperation extends RemoteOperation {
 
         try {
 
-            getMethod = new GetMethod(client.getBaseUri() + TEMPLATE_URL + type.toString().toLowerCase() +
+            getMethod = new GetMethod(client.getBaseUri() + TEMPLATE_URL + type.toString().toLowerCase(Locale.ENGLISH) +
                     JSON_FORMAT);
 
             // remote request

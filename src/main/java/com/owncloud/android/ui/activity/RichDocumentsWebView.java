@@ -97,7 +97,7 @@ public class RichDocumentsWebView extends ExternalSiteWebView {
 
         // TODO make file nullable
         if (file == null) {
-            fileName.setText("Creating template…");
+            fileName.setText(R.string.create_file_from_template);
         } else {
             setThumbnail(file, thumbnail);
             fileName.setText(file.getFileName());
@@ -165,8 +165,7 @@ public class RichDocumentsWebView extends ExternalSiteWebView {
             if ((MimeTypeUtil.isImage(file) || MimeTypeUtil.isVideo(file)) && file.getRemoteId() != null) {
                 // Thumbnail in cache?
                 Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(
-                    ThumbnailsCacheManager.PREFIX_THUMBNAIL + String.valueOf(file.getRemoteId())
-                );
+                    ThumbnailsCacheManager.PREFIX_THUMBNAIL + file.getRemoteId());
 
                 if (thumbnail != null && !file.needsUpdateThumbnail()) {
                     if (MimeTypeUtil.isVideo(file)) {

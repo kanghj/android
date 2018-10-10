@@ -176,13 +176,12 @@ public class ChooseTemplateDialogFragment extends DialogFragment implements Dial
             DisplayUtils.showSnackMessage(listView, R.string.enter_filename);
         } else {
             createFromTemplate(template);
-            dismiss();
         }
     }
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-
+        // cancel is handled by dialog itself, no other button available
     }
 
     private static class CreateFileFromTemplateTask extends AsyncTask<Void, Void, String> {
@@ -216,7 +215,7 @@ public class ChooseTemplateDialogFragment extends DialogFragment implements Dial
 
             if (fragment != null) {
                 if (url.isEmpty()) {
-                    // todo snackbar / error message
+                    DisplayUtils.showSnackMessage(fragment.listView, "Error creating file from template");
                 } else {
                     Intent collaboraWebViewIntent = new Intent(MainApp.getAppContext(), RichDocumentsWebView.class);
                     collaboraWebViewIntent.putExtra(ExternalSiteWebView.EXTRA_TITLE, "Collabora");
@@ -261,13 +260,13 @@ public class ChooseTemplateDialogFragment extends DialogFragment implements Dial
 
         @Override
         protected void onPostExecute(List<Template> templateList) {
-            ChooseTemplateDialogFragment chooseTemplateDialogFragment = chooseTemplateDialogFragmentWeakReference.get();
+            ChooseTemplateDialogFragment fragment = chooseTemplateDialogFragmentWeakReference.get();
 
-            if (chooseTemplateDialogFragment != null) {
+            if (fragment != null) {
                 if (templateList.isEmpty()) {
-                    // todo snackbar / error message
+                    DisplayUtils.showSnackMessage(fragment.listView, R.string.error_retrieving_templates);
                 } else {
-                    chooseTemplateDialogFragment.setTemplateList(templateList);
+                    fragment.setTemplateList(templateList);
                 }
             } else {
                 Log_OC.e(TAG, "Error streaming file: no previewMediaFragment!");
