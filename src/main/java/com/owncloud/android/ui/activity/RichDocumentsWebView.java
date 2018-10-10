@@ -22,6 +22,7 @@
 package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -54,6 +55,8 @@ import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimeTypeUtil;
 
+import java.lang.ref.WeakReference;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -85,6 +88,7 @@ public class RichDocumentsWebView extends ExternalSiteWebView {
     @BindView(R.id.filename)
     TextView fileName;
 
+    @SuppressLint("AddJavascriptInterface") // suppress warning as webview is only used >= Lollipop
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         showToolbar = false;
@@ -327,17 +331,21 @@ public class RichDocumentsWebView extends ExternalSiteWebView {
     private static class LoadUrl extends AsyncTask<String, Void, String> {
 
         private Account account;
-        private RichDocumentsWebView richDocumentsWebView;
+        private WeakReference<RichDocumentsWebView> richDocumentsWebViewWeakReference;
 
-        public LoadUrl(RichDocumentsWebView richDocumentsWebView, Account account) {
+        LoadUrl(RichDocumentsWebView richDocumentsWebView, Account account) {
             this.account = account;
-            this.richDocumentsWebView = richDocumentsWebView;
+            this.richDocumentsWebViewWeakReference = new WeakReference<>(richDocumentsWebView);
         }
 
         @Override
         protected String doInBackground(String... fileId) {
+            if (richDocumentsWebViewWeakReference.get() == null) {
+                return "";
+            }
             RichDocumentsUrlOperation richDocumentsUrlOperation = new RichDocumentsUrlOperation(fileId[0]);
-            RemoteOperationResult result = richDocumentsUrlOperation.execute(account, richDocumentsWebView);
+            RemoteOperationResult result = richDocumentsUrlOperation.execute(account,
+                richDocumentsWebViewWeakReference.get());
 
             if (!result.isSuccess()) {
                 return "";
@@ -348,9 +356,15 @@ public class RichDocumentsWebView extends ExternalSiteWebView {
 
         @Override
         protected void onPostExecute(String url) {
+            RichDocumentsWebView richDocumentsWebView = richDocumentsWebViewWeakReference.get();
+
+            if (richDocumentsWebView == null) {
+                return;
+            }
+
             if (!url.isEmpty()) {
                 richDocumentsWebView.webview.loadUrl(url);
-                richDocumentsWebView.hideLoading(); // TODO remove afterwards
+                richDocumentsWebView.hideLoading();
             } else {
                 Toast.makeText(richDocumentsWebView.getApplicationContext(),
                     R.string.richdocuments_failed_to_load_document, Toast.LENGTH_LONG).show();
